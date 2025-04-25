@@ -1,13 +1,10 @@
-<script setup>
-import Home from "./components/home.vue";
-</script>
-
 <template>
-
-    <home></home>
-
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-4">Flappy Graphic</h1>
+    <PipeGame />
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<script setup>
+import PipeGame from './components/PipeGame.vue'
+</script>
