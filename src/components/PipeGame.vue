@@ -101,6 +101,7 @@ function drawGraph() {
       formulaFunc(9.2) >= tube3 - 0.5 
       ){
       console.log("went thru")
+      ctx.strokeStyle = 'blue'
       correctGraph = true
     }else{
       ctx.strokeStyle = 'red'
