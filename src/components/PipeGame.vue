@@ -3,19 +3,21 @@
   <div>
     <!-- Seção do jogo de canos com input da fórmula e gráfico -->
     <div class="flex flex-col justify-center items-center">
+      <div class="timesTried" id="timesTried">0</div>
+
       <!-- Canvas onde o gráfico é desenhado -->
       <canvas ref="canvas" width="600" height="400"></canvas>
 
-      <!-- Campo de input da fórmula matemática --> 
+      <!-- Campo de input da fórmula matemática -->
       <div class="mathInput">
-      <input
-        :value="formula"
-        @input="onInput"
-        placeholder="Digite a fórmula (ex: Math.sin(x))"
-        class="inputContainer border p-2"
-      />
-      <button class="inputButton" @click="drawGraph"> > </button>
-    </div>
+        <input
+          :value="formula"
+          @input="onInput"
+          placeholder="Digite a fórmula (ex: Math.sin(x))"
+          class="inputContainer border p-2"
+        />
+        <button class="inputButton" @click="doTry">></button>
+      </div>
     </div>
   </div>
 </template>
@@ -36,9 +38,18 @@ import { ref, watch, onMounted } from "vue";
 // Valor reativo da fórmula inserida pelo usuário
 const formula = ref("Math.sin(x)");
 
+let triesCount = 0;
+
 // Função que atualiza a fórmula quando o usuário digita no input
 function onInput(event) {
   formula.value = event.target.value;
+}
+
+function doTry(event) {
+  drawGraph();
+  triesCount = triesCount + 1;
+  let score = document.getElementById("timesTried");
+  score.innerText = triesCount;
 }
 
 // ---------------------
@@ -63,6 +74,8 @@ const pipes = ref([
 
 // Referência ao elemento canvas no DOM
 const canvas = ref(null);
+// Variavel que vai segurar o valor de se o graphico plotado não colide com os tubos
+let correctGraph = false;
 
 // Função que desenha o gráfico e os canos no canvas
 function drawGraph() {
@@ -78,12 +91,9 @@ function drawGraph() {
     ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 10, 400);
   }
 
-  // Variavel que vai segurar o valor de se o graphico plotado não colide com os tubos
-  let correctGraph = false;
-
   try {
     // Cria uma função baseada na fórmula digitada
-    const formulaFunc = new Function('x', `return ${formula.value}`)
+    const formulaFunc = new Function("x", `return ${formula.value}`);
 
     // Inicia o caminho da curva azul
     ctx.beginPath();
@@ -152,23 +162,33 @@ canvas {
   width: 600px;
   margin-top: 10px;
 }
-.inputContainer{
+.inputContainer {
   border: 0 solid #ccc;
   padding: 15px;
   width: 100%;
   background-color: transparent;
 }
-.inputButton{
+.inputButton {
+  position: relative;
   border: 0 solid #ccc;
-  padding: 15px;
-  margin-left: -45px;
-  background-color: transparent;
+  margin-left: -50px;
+  width: 45px;
+  height: 45px;
+  background-color: #adadad;
   transition: font-weight ease-in-out 0.15s;
 }
-.inputButton:hover{
+.inputButton:hover {
   font-weight: bolder;
 }
-.inputButton:active{
+.inputButton:active {
   font-weight: lighter;
+}
+.timesTried {
+  translate: 0 30px 0;
+  z-index: 5;
+  margin-left: 535px;
+  width: 50px;
+  text-align: center;
+  background-color: #adadad;
 }
 </style>
