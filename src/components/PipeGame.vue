@@ -6,7 +6,7 @@
       <div class="timesTried" id="timesTried">0</div>
 
       <!-- Canvas onde o gráfico é desenhado -->
-      <canvas ref="canvas" width="600" height="400"></canvas>
+      <canvas ref="canvas" width="6000" height="4000"></canvas>
 
       <!-- Campo de input da fórmula matemática -->
       <div class="mathInput">
@@ -53,14 +53,15 @@ function doTry(event) {
 // Gera valores aleatórios para os canos (entre -3 e 3)
 let tubes = [];
 for (let x = 1; x <= 3; x++) {
-  tubes[x] = Math.floor(Math.random() * 8) - 3.5;
+  let hold = Math.round(Math.random() * 4 - 3.6);
+  tubes[x] = hold * 10;
 }
 
 // Lista reativa de canos com posições e tamanhos baseados nos valores acima
 const pipes = ref([
-  { x: 3, yMin: tubes[1] + 0.5, yMax: tubes[1] + 3.5 },
-  { x: 6, yMin: tubes[2] + 0.5, yMax: tubes[2] + 3.5 },
-  { x: 9, yMin: tubes[3] + 0.5, yMax: tubes[3] + 3.5 },
+  { x: 30, yMin: tubes[1] - 1, yMax: tubes[1] - 7 },
+  { x: 60, yMin: tubes[2] - 1, yMax: tubes[2] - 7 },
+  { x: 90, yMin: tubes[3] - 1, yMax: tubes[3] - 7 },
 ]);
 
 // ---------------------
@@ -68,38 +69,48 @@ const pipes = ref([
 // ---------------------
 
 // Função que desenha o gráfico e os canos no canvas
+
+let canvaswidth = 6000;
+let canvasheight = 4000;
+
+canvas.width = canvaswidth;
+canvas.height = canvasheight;
+
 function drawGraph() {
   const ctx = canvas.value.getContext("2d"); // contexto 2D
-  ctx.clearRect(0, 0, 600, 400); // limpa o canvas
+  ctx.clearRect(0, 0, canvaswidth, canvasheight); // limpa o canvas
 
   try {
     // Cria uma função baseada na fórmula digitada
-    function formulaFunc(x) {
+    function formulaFunc(inputedValue) {
       const expr = math.compile(formula.value);
-      return expr.evaluate({ x });
+      let x = inputedValue / 10;
+      let evaluate = expr.evaluate({ x });
+      let result = evaluate * 10 - 36;
+      return result;
     }
 
     // Inicia o caminho da curva azul
     ctx.beginPath();
 
-    let hit = 12;
+    let hit = 120;
 
     function testColison(val) {
       return (
-        formulaFunc(val + 0) > tubes[val / 3] + 0.5 ||
-        formulaFunc(val + 0) < tubes[val / 3] - 0.5 ||
-        formulaFunc(val + 0.2) > tubes[val / 3] + 0.5 ||
-        formulaFunc(val + 0.2) < tubes[val / 3] - 0.5
+        formulaFunc(val) > tubes[val / 30] - 1 ||
+        formulaFunc(val) < tubes[val / 30] - 11 ||
+        formulaFunc(val + 2) > tubes[val / 30] - 1 ||
+        formulaFunc(val + 2) < tubes[val / 30] - 11
       );
     }
 
-    for (let x = 9; x > 0; x -= 3) {
+    for (let x = 90; x > 0; x -= 30) {
       if (testColison(x)) {
-        hit = x + 0.2;
+        hit = x + 2;
       }
     }
 
-    correctGraph = hit >= 12;
+    correctGraph = hit >= 120;
 
     if (correctGraph) {
       ctx.strokeStyle = "blue";
@@ -108,7 +119,7 @@ function drawGraph() {
     }
 
     // Desenha a curva no intervalo de x = 0 até x = 12
-    for (let x = 0; x <= hit; x += 0.05) {
+    for (let x = 0; x <= hit; x += 0.5) {
       const y = formulaFunc(x);
       const canvasX = x * 50;
       const canvasY = 200 - y * 50; // ajusta Y para o centro vertical
@@ -117,12 +128,17 @@ function drawGraph() {
       if (x === 0) ctx.moveTo(canvasX, canvasY);
       else ctx.lineTo(canvasX, canvasY);
     }
-
+    ctx.lineWidth = 10;
     ctx.stroke(); // finaliza o desenho da curva
   } catch (e) {
-    let eString = (e + "")
+    let eString = e + "";
     if (eString.includes("Error: Undefined function")) {
-      alert(`Operação desconhecida: ${eString.replace("Error: Undefined function","")}`);
+      alert(
+        `Operação desconhecida: ${eString.replace(
+          "Error: Undefined function",
+          ""
+        )}`
+      );
     }
   }
 
@@ -130,9 +146,9 @@ function drawGraph() {
   ctx.fillStyle = "green";
   for (const pipe of pipes.value) {
     // Parte superior do cano
-    ctx.fillRect(pipe.x * 50, 0, 10, 200 - pipe.yMin * 50);
+    ctx.fillRect(pipe.x * 50, 0, 100, 200 - pipe.yMin * 50);
     // Parte inferior do cano
-    ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 10, 400);
+    ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 100, 4000);
   }
 }
 
@@ -153,6 +169,7 @@ watch(pipes, drawGraph);
 <style scoped>
 /* Estilo básico do canvas */
 canvas {
+  width: 600px;
   border-radius: 10px;
   background-color: #d9d9d9;
 }
