@@ -12,8 +12,9 @@
       <div class="mathInput">
         <input
           :value="formula"
+          @keyup.enter="doTry"
           @input="onInput"
-          placeholder="Digite a fórmula (ex: Math.sin(x))"
+          placeholder="Digite a fórmula (ex: sin(x)*2)"
           class="inputContainer border p-2"
         />
         <button class="inputButton" @click="doTry">></button>
@@ -23,28 +24,25 @@
 </template>
 
 <script setup>
-/**
- * Importando funcionalidades do Vue
- * - ref: para reatividade
- * - watch: para reagir a mudanças de variáveis
- * - onMounted: para executar código após o componente ser montado
- */
 import { ref, watch, onMounted } from "vue";
+import { create, all } from "mathjs";
 
-// ---------------------
-// Fórmula e Input
-// ---------------------
-
-// Valor reativo da fórmula inserida pelo usuário
-const formula = ref("Math.sin(x)");
-
+const math = create(all, {});
+// Referência ao elemento canvas no DOM
+const canvas = ref(null);
+// Variavel que vai segurar o valor de se o graphico plotado não colide com os tubos
+let correctGraph = false;
+// Variavel que vai segurar o valor de quantas tentativas o usuario ja fez
 let triesCount = 0;
+// Valor reativo da fórmula inserida pelo usuário
+const formula = ref("sin(x)");
 
 // Função que atualiza a fórmula quando o usuário digita no input
 function onInput(event) {
   formula.value = event.target.value;
 }
 
+// Função que atualiza o grafico quando o usuário envia uma formula
 function doTry(event) {
   drawGraph();
   triesCount = triesCount + 1;
@@ -52,75 +50,65 @@ function doTry(event) {
   score.innerText = triesCount;
 }
 
-// ---------------------
-// Geração aleatória dos canos
-// ---------------------
-
 // Gera valores aleatórios para os canos (entre -3 e 3)
-let tube1 = Math.floor(Math.random() * 7) - 3.5;
-let tube2 = Math.floor(Math.random() * 8) - 3.5;
-let tube3 = Math.floor(Math.random() * 8) - 3.5;
+let tubes = [];
+for (let x = 1; x <= 3; x++) {
+  tubes[x] = Math.floor(Math.random() * 8) - 3.5;
+}
 
 // Lista reativa de canos com posições e tamanhos baseados nos valores acima
 const pipes = ref([
-  { x: 3, yMin: tube1 + 0.5, yMax: tube1 + 3.5 },
-  { x: 6, yMin: tube2 + 0.5, yMax: tube2 + 3.5 },
-  { x: 9, yMin: tube3 + 0.5, yMax: tube3 + 3.5 },
+  { x: 3, yMin: tubes[1] + 0.5, yMax: tubes[1] + 3.5 },
+  { x: 6, yMin: tubes[2] + 0.5, yMax: tubes[2] + 3.5 },
+  { x: 9, yMin: tubes[3] + 0.5, yMax: tubes[3] + 3.5 },
 ]);
 
 // ---------------------
 // Canvas e desenho do gráfico
 // ---------------------
 
-// Referência ao elemento canvas no DOM
-const canvas = ref(null);
-// Variavel que vai segurar o valor de se o graphico plotado não colide com os tubos
-let correctGraph = false;
-
 // Função que desenha o gráfico e os canos no canvas
 function drawGraph() {
   const ctx = canvas.value.getContext("2d"); // contexto 2D
   ctx.clearRect(0, 0, 600, 400); // limpa o canvas
 
-  // Desenha os canos em verde
-  ctx.fillStyle = "green";
-  for (const pipe of pipes.value) {
-    // Parte superior do cano
-    ctx.fillRect(pipe.x * 50, 0, 10, 200 - pipe.yMin * 50);
-    // Parte inferior do cano
-    ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 10, 400);
-  }
-
   try {
     // Cria uma função baseada na fórmula digitada
-    const formulaFunc = new Function("x", `return ${formula.value}`);
+    function formulaFunc(x) {
+      const expr = math.compile(formula.value);
+      return expr.evaluate({ x });
+    }
 
     // Inicia o caminho da curva azul
     ctx.beginPath();
-    if (
-      formulaFunc(3) <= tube1 + 0.5 &&
-      formulaFunc(3.2) <= tube1 + 0.5 &&
-      formulaFunc(3) >= tube1 - 0.5 &&
-      formulaFunc(3.2) >= tube1 - 0.5 &&
-      formulaFunc(6) <= tube2 + 0.5 &&
-      formulaFunc(6.2) <= tube2 + 0.5 &&
-      formulaFunc(6) >= tube2 - 0.5 &&
-      formulaFunc(6.2) >= tube2 - 0.5 &&
-      formulaFunc(9) <= tube3 + 0.5 &&
-      formulaFunc(9.2) <= tube3 + 0.5 &&
-      formulaFunc(9) >= tube3 - 0.5 &&
-      formulaFunc(9.2) >= tube3 - 0.5
-    ) {
-      console.log("went thru");
+
+    let hit = 12;
+
+    function testColison(val) {
+      return (
+        formulaFunc(val + 0) > tubes[val / 3] + 0.5 ||
+        formulaFunc(val + 0) < tubes[val / 3] - 0.5 ||
+        formulaFunc(val + 0.2) > tubes[val / 3] + 0.5 ||
+        formulaFunc(val + 0.2) < tubes[val / 3] - 0.5
+      );
+    }
+
+    for (let x = 9; x > 0; x -= 3) {
+      if (testColison(x)) {
+        hit = x + 0.2;
+      }
+    }
+
+    correctGraph = hit >= 12;
+
+    if (correctGraph) {
       ctx.strokeStyle = "blue";
-      correctGraph = true;
     } else {
       ctx.strokeStyle = "red";
-      correctGraph = false;
     }
 
     // Desenha a curva no intervalo de x = 0 até x = 12
-    for (let x = 0; x <= 12; x += 0.05) {
+    for (let x = 0; x <= hit; x += 0.05) {
       const y = formulaFunc(x);
       const canvasX = x * 50;
       const canvasY = 200 - y * 50; // ajusta Y para o centro vertical
@@ -132,7 +120,19 @@ function drawGraph() {
 
     ctx.stroke(); // finaliza o desenho da curva
   } catch (e) {
-    console.warn("Erro na fórmula", e);
+    let eString = (e + "")
+    if (eString.includes("Error: Undefined function")) {
+      alert(`Operação desconhecida: ${eString.replace("Error: Undefined function","")}`);
+    }
+  }
+
+  // Desenha os canos em verde
+  ctx.fillStyle = "green";
+  for (const pipe of pipes.value) {
+    // Parte superior do cano
+    ctx.fillRect(pipe.x * 50, 0, 10, 200 - pipe.yMin * 50);
+    // Parte inferior do cano
+    ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 10, 400);
   }
 }
 
@@ -153,24 +153,24 @@ watch(pipes, drawGraph);
 <style scoped>
 /* Estilo básico do canvas */
 canvas {
-  border: 0 solid #ccc;
+  border-radius: 10px;
   background-color: #d9d9d9;
 }
 .mathInput {
-  border: 0 solid #ccc;
-  background-color: #d9d9d9;
+  border-radius: 10px;
   width: 600px;
   margin-top: 10px;
+  background-color: #d9d9d9;
 }
 .inputContainer {
-  border: 0 solid #ccc;
+  border-radius: 10px;
   padding: 15px;
   width: 100%;
   background-color: transparent;
 }
 .inputButton {
+  border-radius: 10px;
   position: relative;
-  border: 0 solid #ccc;
   margin-left: -50px;
   width: 45px;
   height: 45px;
@@ -184,6 +184,7 @@ canvas {
   font-weight: lighter;
 }
 .timesTried {
+  border-radius: 10px;
   translate: 0 30px 0;
   z-index: 5;
   margin-left: 535px;
