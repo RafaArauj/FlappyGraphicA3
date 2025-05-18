@@ -169,13 +169,13 @@ watch(pipes, drawGraph);
 <style scoped>
 /* Estilo básico do canvas */
 canvas {
-  width: 600px;
+  width: 50%;
   border-radius: 10px;
   background-color: #d9d9d9;
 }
 .mathInput {
   border-radius: 10px;
-  width: 600px;
+  width: 50%;
   margin-top: 10px;
   background-color: #d9d9d9;
 }
@@ -204,8 +204,8 @@ canvas {
   border-radius: 10px;
   translate: 0 30px 0;
   z-index: 5;
-  margin-left: 535px;
-  width: 50px;
+  margin-left: 45%;
+  width: 3%;
   text-align: center;
   background-color: #adadad;
 }
