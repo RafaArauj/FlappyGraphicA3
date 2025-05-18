@@ -90,23 +90,29 @@ function drawGraph() {
       return result;
     }
 
+    // Shadow
+    ctx.shadowColor = "rgba(80,80,80)";
+    ctx.shadowBlur = 50;
+    ctx.shadowOffsetX = 50;
+    ctx.shadowOffsetY = 0;
+
     // Inicia o caminho da curva azul
     ctx.beginPath();
 
     let hit = 120;
 
     function testColison(x) {
-      let val = math.round(x/10)*10
+      let val = math.round(x / 10) * 10;
       return (
         formulaFunc(x) > tubes[val / 30] - 1 ||
-        formulaFunc(x) < tubes[val / 30] - 11 
+        formulaFunc(x) < tubes[val / 30] - 11
       );
     }
 
     for (let x = 90; x > 0; x -= 30) {
-      if (testColison(x+2)) {
+      if (testColison(x + 2)) {
         hit = x + 1.8;
-      }else if (testColison(x)){
+      } else if (testColison(x)) {
         hit = x + 0.2;
       }
     }
@@ -143,13 +149,42 @@ function drawGraph() {
     }
   }
 
+  let font = "100px Arial";
+
+  for (let i = 0; i < 4000; i += 500) {
+    ctx.shadowColor = "transparent";
+    ctx.strokeStyle = "rgba(80,80,80,0.5)";
+    ctx.beginPath();
+    ctx.moveTo(0, i);
+    ctx.lineTo(6000, i);
+    ctx.stroke();
+    ctx.font = font;
+    ctx.fillStyle = "rgba(80,80,80,0.5)";
+    ctx.fillText(i / 500 - 4, 20, i - 10);
+  }
+
+  for (let i = 0; i < 6000; i += 500) {
+    ctx.shadowColor = "transparent";
+    ctx.strokeStyle = "rgba(80,80,80,0.5)";
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i, 4000);
+    ctx.stroke();
+    ctx.font = font;
+    ctx.fillStyle = "rgba(80,80,80,0.5)";
+    ctx.fillText(i / 500, i + 20, 1990);
+  }
+
+  ctx.shadowColor = "rgba(80,80,80)";
   // Desenha os canos em verde
   ctx.fillStyle = "green";
   for (const pipe of pipes.value) {
     // Parte superior do cano
-    ctx.fillRect(pipe.x * 50, 0, 100, 200 - pipe.yMin * 50);
+    ctx.fillRect(pipe.x * 50, 0, 100, 140 - pipe.yMin * 50);
+    ctx.fillRect(pipe.x * 50 - 30, 130 - pipe.yMin * 50, 160, 70);
     // Parte inferior do cano
-    ctx.fillRect(pipe.x * 50, 400 - pipe.yMax * 50, 100, 4000);
+    ctx.fillRect(pipe.x * 50, 460 - pipe.yMax * 50, 100, 4000);
+    ctx.fillRect(pipe.x * 50 - 30, 400 - pipe.yMax * 50, 160, 70);
   }
 }
 
@@ -170,13 +205,17 @@ watch(pipes, drawGraph);
 <style scoped>
 /* Estilo básico do canvas */
 canvas {
-  width: 50%;
+  width: 85dvh;
+  min-width: 50%;
+  max-width: 85%;
   border-radius: 10px;
   background-color: #d9d9d9;
 }
 .mathInput {
   border-radius: 10px;
-  width: 50%;
+  width: 85dvh;
+  min-width: 50%;
+  max-width: 85%;
   margin-top: 10px;
   background-color: #d9d9d9;
 }
@@ -205,7 +244,7 @@ canvas {
   border-radius: 10px;
   translate: 0 30px 0;
   z-index: 5;
-  margin-left: 45%;
+  margin-left: 72vmin;
   width: 3%;
   text-align: center;
   background-color: #adadad;
