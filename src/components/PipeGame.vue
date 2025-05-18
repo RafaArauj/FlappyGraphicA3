@@ -95,18 +95,19 @@ function drawGraph() {
 
     let hit = 120;
 
-    function testColison(val) {
+    function testColison(x) {
+      let val = math.round(val/10)*10
       return (
-        formulaFunc(val) > tubes[val / 30] - 1 ||
-        formulaFunc(val) < tubes[val / 30] - 11 ||
-        formulaFunc(val + 2) > tubes[val / 30] - 1 ||
-        formulaFunc(val + 2) < tubes[val / 30] - 11
+        formulaFunc(x) > tubes[val / 30] - 1 ||
+        formulaFunc(x) < tubes[val / 30] - 11 
       );
     }
 
     for (let x = 90; x > 0; x -= 30) {
-      if (testColison(x)) {
-        hit = x + 2;
+      if (testColison(x+2)) {
+        hit = x + 1.8;
+      }else if (testColison(x)){
+        hit = x + 0.2;
       }
     }
 
