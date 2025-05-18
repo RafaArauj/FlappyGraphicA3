@@ -96,7 +96,7 @@ function drawGraph() {
     let hit = 120;
 
     function testColison(x) {
-      let val = math.round(val/10)*10
+      let val = math.round(x/10)*10
       return (
         formulaFunc(x) > tubes[val / 30] - 1 ||
         formulaFunc(x) < tubes[val / 30] - 11 
