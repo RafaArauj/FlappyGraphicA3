@@ -3,7 +3,6 @@
   <div>
     <!-- Seção do jogo de canos com input da fórmula e gráfico -->
     <div class="flex flex-col justify-center items-center">
-      <div class="timesTried" id="timesTried">0</div>
 
       <!-- Canvas onde o gráfico é desenhado -->
       <canvas ref="canvas" width="6000" height="4000"></canvas>
@@ -44,10 +43,8 @@ function onInput(event) {
 
 // Função que atualiza o grafico quando o usuário envia uma formula
 function doTry(event) {
-  drawGraph();
   triesCount = triesCount + 1;
-  let score = document.getElementById("timesTried");
-  score.innerText = triesCount;
+  drawGraph();
 }
 
 // Gera valores aleatórios para os canos (entre -3 e 3)
@@ -96,6 +93,7 @@ function drawGraph() {
     ctx.shadowOffsetX = 50;
     ctx.shadowOffsetY = 0;
 
+    ctx.filter = "blur(3px)";
     // Inicia o caminho da curva azul
     ctx.beginPath();
 
@@ -148,31 +146,32 @@ function drawGraph() {
       );
     }
   }
+  ctx.filter = "blur(0px)";
 
   let font = "100px Arial";
 
-  for (let i = 0; i < 4000; i += 500) {
-    ctx.shadowColor = "transparent";
-    ctx.strokeStyle = "rgba(80,80,80,0.5)";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+
+  ctx.shadowColor = "transparent";
+  ctx.strokeStyle = "rgba(80,80,80,0.5)";
+  ctx.fillStyle = "rgba(80,80,80,0.5)";
+  ctx.font = font;
+
+  for (let i = 500; i < 3900; i += 500) {
     ctx.beginPath();
     ctx.moveTo(0, i);
     ctx.lineTo(6000, i);
     ctx.stroke();
-    ctx.font = font;
-    ctx.fillStyle = "rgba(80,80,80,0.5)";
-    ctx.fillText(i / 500 - 4, 20, i - 10);
+    ctx.fillText(-(i / 500 - 4), 75, i - 50);
   }
 
-  for (let i = 0; i < 6000; i += 500) {
-    ctx.shadowColor = "transparent";
-    ctx.strokeStyle = "rgba(80,80,80,0.5)";
+  for (let i = 500; i < 5900; i += 500) {
     ctx.beginPath();
     ctx.moveTo(i, 0);
     ctx.lineTo(i, 4000);
     ctx.stroke();
-    ctx.font = font;
-    ctx.fillStyle = "rgba(80,80,80,0.5)";
-    ctx.fillText(i / 500, i + 20, 1990);
+    ctx.fillText(i / 500, i + 75, 1950);
   }
 
   ctx.shadowColor = "rgba(80,80,80)";
@@ -186,6 +185,18 @@ function drawGraph() {
     ctx.fillRect(pipe.x * 50, 460 - pipe.yMax * 50, 100, 4000);
     ctx.fillRect(pipe.x * 50 - 30, 400 - pipe.yMax * 50, 160, 70);
   }
+
+  ctx.filter = "blur(1px)";
+  ctx.shadowColor = "rgba(80,80,80,0)";
+  ctx.fillStyle = "rgba(173,173,173,1)";
+  ctx.roundRect(5600, 50, 350, 200, 2000);
+  ctx.stroke();
+  ctx.fill();
+  ctx.font = "150px Arial";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "rgba(0,0,0,1)";
+  ctx.fillText(triesCount, 5775, 150);
 }
 
 // ---------------------
@@ -239,14 +250,5 @@ canvas {
 }
 .inputButton:active {
   font-weight: lighter;
-}
-.timesTried {
-  border-radius: 10px;
-  translate: 0 30px 0;
-  z-index: 5;
-  margin-left: 72vmin;
-  width: 3%;
-  text-align: center;
-  background-color: #adadad;
 }
 </style>
