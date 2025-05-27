@@ -70,6 +70,8 @@ const pipes = ref([
 let canvaswidth = 6000;
 let canvasheight = 4000;
 
+let screenDpi = window.devicePixelRatio
+
 canvas.width = canvaswidth;
 canvas.height = canvasheight;
 
@@ -124,7 +126,7 @@ function drawGraph() {
     }
 
     // Desenha a curva no intervalo de x = 0 até x = 12
-    for (let x = 0; x <= hit; x += 0.5) {
+    for (let x = 0; x <= hit; x += 0.05) {
       const y = formulaFunc(x);
       const canvasX = x * 50;
       const canvasY = 200 - y * 50; // ajusta Y para o centro vertical
@@ -148,10 +150,12 @@ function drawGraph() {
   }
   ctx.filter = "blur(0px)";
 
-  let font = "100px Arial";
+  let font = `${100*screenDpi}px Arial`;
 
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
+
+  ctx.lineWidth = 10*screenDpi
 
   ctx.shadowColor = "transparent";
   ctx.strokeStyle = "rgba(80,80,80,0.5)";
@@ -163,7 +167,7 @@ function drawGraph() {
     ctx.moveTo(0, i);
     ctx.lineTo(6000, i);
     ctx.stroke();
-    ctx.fillText(-(i / 500 - 4), 75, i - 50);
+    ctx.fillText(-(i / 500 - 4), 50*screenDpi, i - 50*screenDpi);
   }
 
   for (let i = 500; i < 5900; i += 500) {
@@ -171,7 +175,7 @@ function drawGraph() {
     ctx.moveTo(i, 0);
     ctx.lineTo(i, 4000);
     ctx.stroke();
-    ctx.fillText(i / 500, i + 75, 1950);
+    ctx.fillText(i / 500, i + 58*screenDpi, 2000 - (50*screenDpi));
   }
 
   ctx.shadowColor = "rgba(80,80,80)";
@@ -189,14 +193,14 @@ function drawGraph() {
   ctx.filter = "blur(1px)";
   ctx.shadowColor = "rgba(80,80,80,0)";
   ctx.fillStyle = "rgba(173,173,173,1)";
-  ctx.roundRect(5600, 50, 350, 200, 2000);
+  ctx.roundRect(5600-(20*screenDpi), 50, 350+(30*screenDpi), 200+(30*screenDpi), 2000);
   ctx.stroke();
   ctx.fill();
-  ctx.font = "150px Arial";
+  ctx.font = `${100*screenDpi+50}px Arial`;
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(0,0,0,1)";
-  ctx.fillText(triesCount, 5775, 150);
+  ctx.fillText(triesCount, 5775-(5*screenDpi), 150+(20*screenDpi));
 }
 
 // ---------------------
@@ -216,15 +220,14 @@ watch(pipes, drawGraph);
 <style scoped>
 /* Estilo básico do canvas */
 canvas {
-  width: 85dvh;
-  min-width: 50%;
+  width: 65%;
   max-width: 85%;
   border-radius: 10px;
   background-color: #d9d9d9;
 }
 .mathInput {
   border-radius: 10px;
-  width: 85dvh;
+  width: 65%;
   min-width: 50%;
   max-width: 85%;
   margin-top: 10px;
