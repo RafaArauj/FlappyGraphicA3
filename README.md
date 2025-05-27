@@ -15,7 +15,7 @@ O projeto visa unir diversão e conhecimento, promovendo a prática de conceitos
 | Gabriel Caldeira | | ![Foto Gabriel](coloque-aqui-o-link-ou-path-da-imagem) |
 | Gabriel Fresan | Modelagem e documentação | ![Foto Gabriel Santos](https://avatars.githubusercontent.com/u/69011585?v=4) |
 | Gabriel Henrique Santos | Testes e apoio na programação | ![Foto Gabriel Henrique Santos](coloque-aqui-o-link-ou-path-da-imagem) |
-| João Pedro Nunes Ramos e Silva | Modelagem e documentação | ![Foto João Pedro](https://avatars.githubusercontent.com/u/169109696?v=4) |
+| João Pedro Nunes Ramos e Silva | Modelagem e documentação | <img src="https://avatars.githubusercontent.com/u/169109696?v=4" width="200"> |
 | Rafaela Araujo Fontoura da Rosa | | ![Foto Rafaela](https://avatars.githubusercontent.com/u/82467963?v=4) |
 
 ---
