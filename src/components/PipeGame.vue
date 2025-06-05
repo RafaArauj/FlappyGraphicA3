@@ -3,9 +3,13 @@
   <div>
     <!-- Seção do jogo de canos com input da fórmula e gráfico -->
     <div class="flex flex-col justify-center items-center">
-
       <!-- Canvas onde o gráfico é desenhado -->
-      <canvas ref="canvas" width="6000" height="4000"></canvas>
+      <canvas
+        ref="canvas"
+        width="6000"
+        height="4000"
+        @click="canvasOnClick"
+      ></canvas>
 
       <!-- Campo de input da fórmula matemática -->
       <div class="mathInput">
@@ -70,7 +74,7 @@ const pipes = ref([
 let canvaswidth = 6000;
 let canvasheight = 4000;
 
-let screenDpi = window.devicePixelRatio
+let screenDpi = window.devicePixelRatio;
 
 canvas.width = canvaswidth;
 canvas.height = canvasheight;
@@ -150,12 +154,12 @@ function drawGraph() {
   }
   ctx.filter = "blur(0px)";
 
-  let font = `${100*screenDpi}px Arial`;
+  let font = `${100 * screenDpi}px Arial`;
 
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
-  ctx.lineWidth = 10*screenDpi
+  ctx.lineWidth = 10 * screenDpi;
 
   ctx.shadowColor = "transparent";
   ctx.strokeStyle = "rgba(80,80,80,0.5)";
@@ -167,7 +171,7 @@ function drawGraph() {
     ctx.moveTo(0, i);
     ctx.lineTo(6000, i);
     ctx.stroke();
-    ctx.fillText(-(i / 500 - 4), 50*screenDpi, i - 50*screenDpi);
+    ctx.fillText(-(i / 500 - 4), 50 * screenDpi, i - 50 * screenDpi);
   }
 
   for (let i = 500; i < 5900; i += 500) {
@@ -175,7 +179,7 @@ function drawGraph() {
     ctx.moveTo(i, 0);
     ctx.lineTo(i, 4000);
     ctx.stroke();
-    ctx.fillText(i / 500, i + 58*screenDpi, 2000 - (50*screenDpi));
+    ctx.fillText(i / 500, i + 58 * screenDpi, 2000 - 50 * screenDpi);
   }
 
   ctx.shadowColor = "rgba(80,80,80)";
@@ -193,14 +197,31 @@ function drawGraph() {
   ctx.filter = "blur(1px)";
   ctx.shadowColor = "rgba(80,80,80,0)";
   ctx.fillStyle = "rgba(173,173,173,1)";
-  ctx.roundRect(5600-(20*screenDpi), 50, 350+(30*screenDpi), 200+(30*screenDpi), 2000);
+  ctx.roundRect(
+    5600 - 20 * screenDpi,
+    50,
+    350 + 30 * screenDpi,
+    200 + 30 * screenDpi,
+    2000
+  );
   ctx.stroke();
   ctx.fill();
-  ctx.font = `${100*screenDpi+50}px Arial`;
+  ctx.font = `${100 * screenDpi + 50}px Arial`;
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(0,0,0,1)";
-  ctx.fillText(triesCount, 5775-(5*screenDpi), 150+(20*screenDpi));
+  ctx.fillText(triesCount, 5775 - 5 * screenDpi, 150 + 20 * screenDpi);
+  if (correctGraph) {
+    ctx.font = `500px Arial`;
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(55,75,55,1)";
+    ctx.fillText("Gráfico correto", 3000, 2000);
+
+    ctx.font = `200px Arial`;
+    ctx.fillStyle = "rgba(0,0,0,1)";
+    ctx.fillText("Cliquem em qualquer lugar do gráfico para tentar mais um", 3000, 3000);
+  }
 }
 
 // ---------------------
@@ -215,6 +236,12 @@ onMounted(drawGraph);
 
 // Redesenha se os canos mudarem (embora eles sejam fixos nesse exemplo)
 watch(pipes, drawGraph);
+
+function canvasOnClick() {
+  if (correctGraph) {
+    window.location.reload();
+  }
+}
 </script>
 
 <style scoped>
