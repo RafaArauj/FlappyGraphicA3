@@ -26,14 +26,13 @@ O projeto visa unir diversão e conhecimento, promovendo a prática de conceitos
 - CSS3
 - JavaScript
 - Math.js (para interpretação de expressões matemáticas)
-- Bibliotecas de gráficos (indicar qual for utilizada)
 
 ### 📌 Logos das tecnologias:
 
 <img src="coloque-aqui-o-link-ou-path-da-logo-html" width="50">  
 <img src="coloque-aqui-o-link-ou-path-da-logo-css" width="50">  
-<img src="coloque-aqui-o-link-ou-path-da-logo-js" width="50">  
-<img src="coloque-aqui-o-link-ou-path-da-logo-mathjs" width="50">  
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" width="50">  
+<img src="https://s3.amazonaws.com/appforest_uf/f1674411173733x207715045267055740/mathjs_330x100.png" width="50">  
 
 ---
 
