@@ -1,4 +1,4 @@
-🎮 Flappy Graphic - Jogo Interativo de Funções Matemát
+🎮 Flappy Graphic - Jogo Interativo de Funções Matemática
 
 ## 📚 Descrição do Projeto
 
