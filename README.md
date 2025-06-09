@@ -16,7 +16,7 @@ O projeto visa unir diversão e conhecimento, promovendo a prática de conceitos
 | Gabriel Fresan | Programador | ![Foto Gabriel Santos](https://avatars.githubusercontent.com/u/69011585?v=4) |
 | Gabriel Henrique | Testes e apoio na programação | <img src="https://avatars.githubusercontent.com/u/207466084?v=4" width="500"> |
 | João Pedro Nunes Ramos e Silva | Modelagem e documentação | <img src="https://avatars.githubusercontent.com/u/169109696?v=4" width="500"> |
-| Rafaela Araujo Fontoura da Rosa | | <img src="https://avatars.githubusercontent.com/u/82467963?v=4" width="500"> |
+| Rafaela Araujo Fontoura da Rosa | Desenvolvimento Front-end | <img src="https://avatars.githubusercontent.com/u/82467963?v=4" width="500"> |
 
 ---
 
