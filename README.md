@@ -55,4 +55,4 @@ O projeto visa unir diversão e conhecimento, promovendo a prática de conceitos
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/flappy-function.git
+git clone https://git@github.com:RafaArauj/FlappyGraphicA3.git
