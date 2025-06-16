@@ -1,82 +1,65 @@
 <template>
-  <div class="w-[600px] border-b flex flex-col items-center justify-center gap-2">
-    <nav class="flex gap-x-40 p-4">
-      <button
-          v-for="(item, index) in menuItems"
-          :key="index"
-          @click="handleMenuClick(item.target)"
-          :class="{'font-bold underline decoration-2 decoration-purple-900': activeSection === item.target}"
-      >
-        {{ item.label }}
-      </button>
-    </nav>
+  <div class="flex flex-col p-4 md:p-8">
+    <!-- Menu de Navegação -->
+    <div class="border-b border-gray-200 pb-4 mb-6">
+      <nav class="flex justify-center gap-4 md:gap-8">
+        <button
+            v-for="(item, index) in menuItems"
+            :key="index"
+            @click="handleMenuClick(item.target)"
+            class="px-4 py-2 transition-all"
+            :class="{
+            'font-bold text-purple-900 border-b-2 border-purple-900': activeSection === item.target,
+            'hover:text-purple-700': activeSection !== item.target
+          }"
+        >
+          {{ item.label }}
+        </button>
+      </nav>
+    </div>
+
+    <!-- Menu/barra de navegação -->
+    <div class="flex-1 overflow-auto">
+      <About v-if="showAbout" id="sobre" />
+      <PipeGame v-if="showGame" id="jogo" />
+      <HowPlay v-if="showHowPlay" id="howPlay" />
+    </div>
   </div>
-
-  <section v-if="showGame" id="jogo">
-    <span class="text-2xl flex justify-center font-bold mb-4">Flappy Graphic</span>
-    <PipeGame />
-  </section>
-
-  <section v-if="showHowPlay" id="howPlay" class="flex flex-col justify-center items-center">
-    <HowPlay />
-  </section>
-
-  <section v-if="showAbout" id="sobre" class="flex flex-col justify-center items-center">
-    <About />
-  </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import PipeGame from "@/components/PipeGame.vue";
 import About from "@/components/about.vue";
-import HowPlay from "@/components/icons/how-play.vue";
+import HowPlay from "@/components/how-play.vue";
 
 const menuItems = [
-  { label: 'Jogo', target: 'jogo' },
-  { label: 'Como Jogar', target: 'howPlay' },
-  { label: 'Sobre', target: 'sobre' },
+  {label: 'Sobre', target: 'sobre'},
+  {label: 'Jogo', target: 'jogo'},
+  {label: 'Como Jogar', target: 'howPlay'},
 ];
 
-// ✅ Inicia com JOGO ativo
-const activeSection = ref('jogo');
-
-// ✅ Controle de visibilidade inicial
-const showGame = ref(true);
-const showHowPlay = ref(true);
-const showAbout = ref(false);
+const activeSection = ref('sobre');
+const showAbout = ref(true);
+const showGame = ref(false);
+const showHowPlay = ref(false);
 
 function handleMenuClick(target) {
   activeSection.value = target;
 
-  if (target === 'sobre') {
-    showAbout.value = true;
-    showGame.value = false;
-    showHowPlay.value = false;
-  } else {
-    showAbout.value = false;
-    showGame.value = true;
-    showHowPlay.value = true;
-  }
+  // Atualiza visibilidade do menu
+  showAbout.value = target === 'sobre';
+  showGame.value = target === 'jogo';
+  showHowPlay.value = target === 'howPlay';
 
-  // Scroll suave para a seção
+  // Scroll suave
   const el = document.getElementById(target);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth' });
-  }
+  if (el) el.scrollIntoView({behavior: 'smooth'});
 }
 
-// ✅ Opcional: garantir que o scroll inicie na seção "Jogo"
+
 onMounted(() => {
-  const el = document.getElementById('jogo');
-  if (el) {
-    el.scrollIntoView({ behavior: 'auto' });
-  }
+  const el = document.getElementById('sobre');
+  if (el) el.scrollIntoView({behavior: 'auto'});
 });
 </script>
-
-<style scoped>
-button {
-  cursor: pointer;
-}
-</style>

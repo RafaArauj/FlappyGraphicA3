@@ -184,7 +184,7 @@ function drawGraph() {
 
   ctx.shadowColor = "rgba(80,80,80)";
   // Desenha os canos em verde
-  ctx.fillStyle = "green";
+  ctx.fillStyle = "#F2B652";
   for (const pipe of pipes.value) {
     // Parte superior do cano
     ctx.fillRect(pipe.x * 50, 0, 100, 140 - pipe.yMin * 50);
