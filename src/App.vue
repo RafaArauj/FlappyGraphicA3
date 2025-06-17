@@ -1,43 +1,47 @@
 <template>
-  <!-- Mostra o grid apenas se não for a tela de jogo -->
-  <div v-if="!isGameView" class="grid md:grid-cols-2 max-md:grid-rows-[auto_1fr] min-h-screen">
-    <!-- Banner Inicial -->
-    <div
-        class="bg-[#26C4A5] flex flex-col items-center justify-center gap-4 p-8 text-white text-2xl"
-    >
-      <img class="w-72" src="@/assets/GroupLogoFinal.svg" alt="Logo Flappy Graphic">
-      <span>Construa seu conhecimento</span>
-    </div>
-
-    <!-- NavBar -->
-    <NavBar
-        @item-selected="handleItemSelected"
-        @game-selected="handleGameSelected"
-    />
+  <div class="min-h-screen" :class="{'grid md:grid-cols-2 max-md:grid-rows-[auto,1fr]': activeItem !== 'jogo'}">
+    <Transition name="logo" mode="out-in">
+      <LogoPage
+          v-if="activeItem !== 'jogo'"
+          class="max-md:row-start-1"
+          key="logo"
+      />
+    </Transition>
+    <NavBar @item-selected="handleItemSelected" class="max-md:row-start-2" />
   </div>
-
-  <!-- vou mudar pra atualizar a visibilidade da logo quando estiver no jogo-->
-  <NavBar
-      v-else
-      @item-selected="handleItemSelected"
-      @game-selected="handleGameSelected"
-  />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import NavBar from "@/components/nav-bar.vue";
+import LogoPage from "@/components/logo-page.vue";
 
-const hasSelectedItem = ref(false);
-const isGameView = ref(false);
+const activeItem = ref('sobre');
 
-function handleItemSelected() {
-  hasSelectedItem.value = true;
-  isGameView.value = false; // Reset ao selecionar outros itens
-}
-
-function handleGameSelected() {
-  hasSelectedItem.value = true;
-  isGameView.value = true; // Ativa o modo "somente jogo"
+function handleItemSelected(item) {
+  activeItem.value = item;
 }
 </script>
+
+<style>
+.logo-enter-active,
+.logo-leave-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-enter-from {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.logo-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+  position: absolute;
+}
+
+/* Garante que o container do logo não colapse durante a transição */
+.min-h-screen > :first-child {
+  min-width: 50vw;
+}
+</style>

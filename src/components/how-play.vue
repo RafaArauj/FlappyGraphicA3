@@ -6,7 +6,7 @@ import TextStructure from "@/components/text-structure.vue";
 <template>
   <div class="flex flex-col justify-center items-start">
 <span class="text-2xl self-center pt-4">Como Jogar</span>
-    <div class=" flex flex-col w-[500px] self-center pt-4 gap-y-2 text-justify">
+    <div class=" flex flex-col w-2/3 self-center pt-4 gap-y-8 text-justify">
 <text-structure title="1." content=" A linha será desenhada automaticamente no plano cartesiano
 
 Assim que você escrever a função, a linha aparecerá no gráfico. O desafio é fazer essa linha passar entre os espaços dos obstáculos.

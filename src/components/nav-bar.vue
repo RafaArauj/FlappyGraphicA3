@@ -21,22 +21,24 @@
     <!-- Menu/barra de navegação -->
     <div class="flex-1 overflow-auto">
       <About v-if="showAbout" id="sobre" />
-      <PipeGame v-if="showGame" id="jogo" />
       <HowPlay v-if="showHowPlay" id="howPlay" />
+      <PipeGame v-if="showGame" id="jogo" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import PipeGame from "@/components/PipeGame.vue";
 import About from "@/components/about.vue";
 import HowPlay from "@/components/how-play.vue";
 
+const emit = defineEmits(['item-selected']);
+
 const menuItems = [
   {label: 'Sobre', target: 'sobre'},
-  {label: 'Jogo', target: 'jogo'},
   {label: 'Como Jogar', target: 'howPlay'},
+  {label: 'Jogo', target: 'jogo'},
 ];
 
 const activeSection = ref('sobre');
@@ -46,11 +48,12 @@ const showHowPlay = ref(false);
 
 function handleMenuClick(target) {
   activeSection.value = target;
-
   // Atualiza visibilidade do menu
   showAbout.value = target === 'sobre';
   showGame.value = target === 'jogo';
   showHowPlay.value = target === 'howPlay';
+
+  emit('item-selected', target); // <- envia para o componente pai
 
   // Scroll suave
   const el = document.getElementById(target);

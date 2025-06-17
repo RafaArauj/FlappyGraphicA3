@@ -126,7 +126,7 @@ function drawGraph() {
     if (correctGraph) {
       ctx.strokeStyle = "blue";
     } else {
-      ctx.strokeStyle = "red";
+      ctx.strokeStyle = "#F2B652";
     }
 
     // Desenha a curva no intervalo de x = 0 até x = 12
@@ -162,8 +162,8 @@ function drawGraph() {
   ctx.lineWidth = 10 * screenDpi;
 
   ctx.shadowColor = "transparent";
-  ctx.strokeStyle = "rgba(80,80,80,0.5)";
-  ctx.fillStyle = "rgba(80,80,80,0.5)";
+  ctx.strokeStyle = "#ACE08C";
+  ctx.fillStyle = "rgba(48,48,48,0.5)";
   ctx.font = font;
 
   for (let i = 500; i < 3900; i += 500) {
@@ -182,9 +182,9 @@ function drawGraph() {
     ctx.fillText(i / 500, i + 58 * screenDpi, 2000 - 50 * screenDpi);
   }
 
-  ctx.shadowColor = "rgba(80,80,80)";
+  ctx.shadowColor = "rgb(159,159,159)";
   // Desenha os canos em verde
-  ctx.fillStyle = "#F2B652";
+  ctx.fillStyle = "#26C4A5";
   for (const pipe of pipes.value) {
     // Parte superior do cano
     ctx.fillRect(pipe.x * 50, 0, 100, 140 - pipe.yMin * 50);
@@ -195,8 +195,8 @@ function drawGraph() {
   }
 
   ctx.filter = "blur(1px)";
-  ctx.shadowColor = "rgba(80,80,80,0)";
-  ctx.fillStyle = "rgba(173,173,173,1)";
+  ctx.shadowColor = "rgba(255,255,255,0)";
+  ctx.fillStyle = "rgb(255,255,255)";
   ctx.roundRect(
     5600 - 20 * screenDpi,
     50,
@@ -250,7 +250,7 @@ canvas {
   width: 65%;
   max-width: 85%;
   border-radius: 10px;
-  background-color: #d9d9d9;
+  background-color: #efefef;
 }
 .mathInput {
   border-radius: 10px;
@@ -258,7 +258,7 @@ canvas {
   min-width: 50%;
   max-width: 85%;
   margin-top: 10px;
-  background-color: #d9d9d9;
+  background-color: #efefef;
 }
 .inputContainer {
   border-radius: 10px;
@@ -272,7 +272,7 @@ canvas {
   margin-left: -50px;
   width: 45px;
   height: 45px;
-  background-color: #adadad;
+  background-color: #dad8d8;
   transition: font-weight ease-in-out 0.15s;
 }
 .inputButton:hover {
