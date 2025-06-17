@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col p-4 md:p-8">
+  <div class="flex flex-col items-center p-4 md:p-8">
     <!-- Menu de Navegação -->
-    <div class="border-b border-gray-200 pb-4 mb-6">
-      <nav class="flex justify-center gap-4 md:gap-8">
+    <div class="border-b max-w-[900px] border-gray-200 pb-4 mb-6">
+      <nav class="flex justify-center gap-4 md:gap-10">
         <button
             v-for="(item, index) in menuItems"
             :key="index"
