@@ -13,6 +13,7 @@
 
       <!-- Campo de input da fórmula matemática -->
       <div class="mathInput">
+        <div class="fDeX">𝑓(𝑥)=</div>
         <input
           :value="formula"
           @keyup.enter="doTry"
@@ -90,6 +91,9 @@ function drawGraph() {
       let x = inputedValue / 10;
       let evaluate = expr.evaluate({ x });
       let result = evaluate * 10 - 36;
+      if (!result) {
+        throw "Error: Undefined function";
+      }
       return result;
     }
 
@@ -142,15 +146,7 @@ function drawGraph() {
     ctx.lineWidth = 10;
     ctx.stroke(); // finaliza o desenho da curva
   } catch (e) {
-    let eString = e + "";
-    if (eString.includes("Error: Undefined function")) {
-      alert(
-        `Operação desconhecida: ${eString.replace(
-          "Error: Undefined function",
-          ""
-        )}`
-      );
-    }
+    alert(`Operação matemática desconhecida ou invalida`);
   }
   ctx.filter = "blur(0px)";
 
@@ -220,7 +216,11 @@ function drawGraph() {
 
     ctx.font = `200px Arial`;
     ctx.fillStyle = "rgba(0,0,0,1)";
-    ctx.fillText("Cliquem em qualquer lugar do gráfico para tentar mais um", 3000, 3000);
+    ctx.fillText(
+      "Cliquem em qualquer lugar do gráfico para tentar mais um",
+      3000,
+      3000
+    );
   }
 }
 
@@ -253,6 +253,8 @@ canvas {
   background-color: #efefef;
 }
 .mathInput {
+  display: flex;
+  flex-direction: row;
   border-radius: 10px;
   width: 65%;
   min-width: 50%;
@@ -263,10 +265,12 @@ canvas {
 .inputContainer {
   border-radius: 10px;
   padding: 15px;
+  padding-left: 60px; 
   width: 100%;
   background-color: transparent;
 }
 .inputButton {
+  margin-top: 6px;
   border-radius: 10px;
   position: relative;
   margin-left: -50px;
@@ -280,5 +284,10 @@ canvas {
 }
 .inputButton:active {
   font-weight: lighter;
+}
+.fDeX {
+  width: 45px;
+  padding: 16px;
+  margin-right: -45px;
 }
 </style>
